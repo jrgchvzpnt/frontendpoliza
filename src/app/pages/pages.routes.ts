@@ -8,7 +8,7 @@ import { PolizaEditComponent } from './poliza/poliza-edit/poliza-edit.component'
 
 export const pageRoutes: Routes = [
   {
-    path: 'patient',
+    path: 'empleado',
     component: EmpleadoComponent,
     children: [
       { path: 'new', component: EmpleadoEditComponent },
