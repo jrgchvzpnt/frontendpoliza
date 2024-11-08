@@ -2,33 +2,32 @@ import { Injectable } from '@angular/core';
 import { GenericService } from './generic.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
-import { Empleado } from '../Model/empleado';
 import { Subject } from 'rxjs';
+import { Inventario } from '../Model/inventario';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EmpleadoService extends GenericService<Empleado> {
+export class InventarioService extends GenericService<Inventario> {
 
-  private empleadoChange: Subject<Empleado[]> = new Subject<Empleado[]>();
+  private inventarioChange: Subject<Inventario[]> = new Subject<Inventario[]>();
   private messageChange: Subject<string> = new Subject<string>();
 
 
 
   constructor(protected override http: HttpClient) {
-    super(http, `http://localhost:8080/api/empleados`);
-   // super(http, `${environment.HOST}/api/empleados`);
-    //http://localhost:8080
+     super(http, `${environment.HOST}/api/inventario`);
+    
 
   }
   
  
-  setEmpleadoChange(data: Empleado[]) {
-    this.empleadoChange.next(data);
+  setInventarioChange(data: Inventario[]) {
+    this.inventarioChange.next(data);
   }
 
-  getEmpleadoChange() {
-    return this.empleadoChange.asObservable();
+  getInventarioChange() {
+    return this.inventarioChange.asObservable();
   }
 
   setMessageChange(data: string) {

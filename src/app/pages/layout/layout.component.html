@@ -8,7 +8,7 @@
             }
         </button>
 
-        <span>MediApp</span>
+        <span>PolizaApp</span>
 
         <span class="example-spacer"></span>
 
@@ -23,7 +23,7 @@
             </button>
             <button mat-menu-item (click)="sidenav.opened = false" (click)="logout()">
                 <mat-icon>exit_to_app</mat-icon>
-                <span>Logout</span> 
+                <span>Logout</span>
             </button>
         </mat-menu>
     </mat-toolbar>
@@ -31,32 +31,32 @@
     <mat-sidenav-container class="example-sidenav-container">
         <mat-sidenav #sidenav style="width: 250px" mode="push">
 
-            <img src="assets/mitocode.png" width="128" style="margin-left: 20px" alt="Imagen">
+
 
 
             <mat-divider></mat-divider>
             <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
                 routerLink="/pages/empleado" style="cursor: pointer">
-                <mat-icon>search</mat-icon>
+                <mat-icon>person_add</mat-icon>
                 <span>Empleados</span>
             </button>
             <mat-divider></mat-divider>
             <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
                 routerLink="/pages/inventario" style="cursor: pointer">
                 <mat-icon>view_carousel</mat-icon>
-                <span>Register Consult W.</span>
+                <span>inventario</span>
             </button>
             <mat-divider></mat-divider>
             <button class="myButton" [routerLinkActive]="['active']" mat-menu-item (click)="sidenav.toggle()"
                 routerLink="/pages/poliza" style="cursor: pointer">
                 <mat-icon>star_rate</mat-icon>
-                <span>Specialty</span>
+                <span>Poliza</span>
             </button>
             <mat-divider></mat-divider>
-           
-            
-           
-       
+
+
+
+
         </mat-sidenav>
 
         <mat-sidenav-content>

@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from "@angular/common/http";
 import { Inject, Injectable } from '@angular/core';
+import { Empleado } from '../Model/empleado';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,12 +13,45 @@ export class GenericService<T> {
     @Inject('url') protected url: string
   ) {}
 
-  findAll() {
-    return this.http.get<T[]>(this.url);
+
+
+  findAllEmpleado() {
+    return this.http.get<{ Data: { Empleados: T[] } }>(this.url).pipe(
+      map(response => response.Data.Empleados)
+    );
+  }
+
+  findAllInventario() {
+    return this.http.get<{ Data: { Inventario: T[] } }>(this.url).pipe(
+      map(response => response.Data.Inventario)
+    );
+
+  }
+  findAllPoliza() {
+    return this.http.get<{ Data: { Poliza: T, DetalleArticulo: any, Empleado: any } }>(this.url).pipe(
+      map(response => {
+        const { Poliza, DetalleArticulo, Empleado } = response.Data;
+        return { poliza: Poliza, detalleArticulo: DetalleArticulo, empleado: Empleado };
+      })
+    );
+  }
+
+  findAllPolizas(): Observable<any> {
+    return this.http.get<any>(`${this.url}`).pipe(
+      map(response => response.Data)
+    );
   }
 
   findById(id: number) {
-    return this.http.get<T>(`${this.url}/${id}`);
+    return this.http.get<{ Data: { Empleado: T } }>(`${this.url}/${id}`).pipe(
+      map(response => response.Data.Empleado)
+    );
+  }
+
+  findByIdInventario(id: number) {
+    return this.http.get<{ Data: { Inventario: T } }>(`${this.url}/${id}`).pipe(
+      map(response => response.Data.Inventario)
+    );
   }
 
   save(t: T) {
@@ -27,6 +63,6 @@ export class GenericService<T> {
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
+    return this.http.delete<void>(`${this.url}/${id}`);
   }
 }

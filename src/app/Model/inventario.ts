@@ -1,6 +1,6 @@
 export class Inventario {
     sku: number = 0;
-    String: string = "";
+    nombre: string = "";
     cantidad: number = 0;
     
     

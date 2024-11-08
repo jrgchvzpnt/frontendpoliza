@@ -1,1 +1,58 @@
-<p>empleado-edit works!</p>
+<form [formGroup]="form" class="example-container" (submit)="operate()">
+
+    
+   
+    <mat-form-field>
+        <input matInput placeholder="ID Empleado" required formControlName="idEmpleado">
+        @if(f['idEmpleado'].errors?.['required'] && f['idEmpleado'].touched){
+            <small class="invalid">Is required</small>
+        }
+        @if(f['idEmpleado'].errors?.['minlength'] && f['idEmpleado'].touched){
+            <small class="invalid">Minlength is 3</small>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="nombre" required formControlName="nombre">
+        @if(f['nombre'].errors?.['required'] && f['nombre'].touched){
+            <small class="invalid">Is required</small>
+        }
+        @if(f['nombre'].errors?.['minlength'] && f['nombre'].touched){
+            <small class="invalid">Minlength is 3</small>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="apellido" required formControlName="apellido">
+        @if(f['apellido'].errors?.['required'] && f['apellido'].touched){
+            <small class="invalid">Is required</small>
+        }
+        @if(f['apellido'].errors?.['minlength'] && f['apellido'].touched){
+            <small class="invalid">Minlength is 3</small>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="puesto" required formControlName="puesto">
+        @if(f['puesto'].errors?.['required'] && f['puesto'].touched){
+            <small class="invalid">Is required</small>
+        }
+        @if(f['puesto'].errors?.['minlength'] && f['puesto'].touched){
+            <small class="invalid">Minlength is 3</small>
+        }
+    </mat-form-field>
+
+  
+
+    
+
+    <button mat-raised-button color="primary" type="submit">
+        <mat-icon>done</mat-icon>
+        <span>Done</span>
+    </button>
+
+    <button mat-raised-button color="accent" type="button" routerLink="/pages/empleado">
+        <mat-icon>cancel</mat-icon>
+        <span>Cancel</span>
+    </button>
+</form>
