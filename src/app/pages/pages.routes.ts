@@ -4,7 +4,7 @@ import { EmpleadoEditComponent } from './empleado/empleado-edit/empleado-edit.co
 import { InventarioComponent } from './inventario/inventario.component';
 import { InventarioEditComponent } from './inventario/inventario-edit/inventario-edit.component';
 import { PolizaComponent } from './poliza/poliza.component';
-import { PolizaEditComponent } from './poliza/poliza-edit/poliza-edit.component';
+
 
 export const pageRoutes: Routes = [
   {
@@ -24,12 +24,5 @@ export const pageRoutes: Routes = [
   },
   {
     path: 'poliza', component: PolizaComponent,
-
-    children: [
-      { path: 'new', component: PolizaEditComponent },
-      { path: 'edit/:id', component: PolizaEditComponent },
-    ]
-  },
-  
-
+  }
 ];

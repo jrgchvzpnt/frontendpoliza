@@ -1,61 +1,52 @@
-<div [hidden]="checkchildren()">
-  <mat-form-field>
-      <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Laptop" #input>
+<mat-horizontal-stepper #stepper>
+  <mat-step>
+  <ng-template matStepLabel>Principal</ng-template>
+    <div class="form-container">
+      <form [formGroup]="firstFormGroup">
+        <mat-form-field>
+          <input matInput placeholder="Poliza" formControlName="idPoliza">
+       </mat-form-field>
+
+
+
+      <mat-form-field>
+        <mat-label>Empleado</mat-label>
+        <mat-select formControlName="empleadoGenero">
+            @for (p of empleado; track $index) {
+            <mat-option [value]="p">{{p.nombre}} {{p.apellido}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>inventario</mat-label>
+      <mat-select formControlName="inventario">
+          @for (p of inventario; track $index) {
+          <mat-option [value]="p">{{p.nombre}}</mat-option>
+          }
+      </mat-select>
   </mat-form-field>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
-      <!-- ID Poliza Column -->
-      <ng-container matColumnDef="idPoliza">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID Poliza</th>
-          <td mat-cell *matCellDef="let element"> {{element.idPoliza}} </td>
-      </ng-container>
+  <mat-form-field>
+    <input matInput placeholder="Cantidad"  formControlName="cantidad">
+  </mat-form-field>
 
-      <!-- SKU Column -->
-      <ng-container matColumnDef="sku">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>SKU</th>
-          <td mat-cell *matCellDef="let element"> {{element.sku}} </td>
-      </ng-container>
 
-      <!-- Nombre del Artículo Column -->
-      <ng-container matColumnDef="nombreArticulo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del Artículo</th>
-          <td mat-cell *matCellDef="let element"> {{element.nombreArticulo}} </td>
-      </ng-container>
+  <mat-form-field appearance="fill">
+    <mat-label>Escoja una fecha</mat-label>
+    <input matInput [matDatepicker]="picker" [min]="minDate" formControlName="fecha"
+        (dateChange)="getDate($event)">
+    <mat-hint>DD/MM/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
 
-      <!-- Cantidad Column -->
-      <ng-container matColumnDef="cantidad">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</th>
-          <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
-      </ng-container>
+  <button mat-raised-button color="primary" type="button" (click)="save()">Guardar Poliza</button>
 
-      <!-- Empleado Column -->
-      <ng-container matColumnDef="empleado">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Empleado</th>
-          <td mat-cell *matCellDef="let element"> {{element.nombreEmpleado}} {{element.apellidoEmpleado}} </td>
-      </ng-container>
 
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let element">
-              <button mat-button color="primary" [routerLink]="['edit', element.idPoliza]">
-                  <mat-icon>mode_edit</mat-icon>
-              </button>
+      </form>
 
-              <button mat-button color="accent" (click)="delete(element.idPoliza)">
-                  <mat-icon>delete</mat-icon>
-              </button>
-          </td>
-      </ng-container>
+    </div>
+  </mat-step>
 
-      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
-      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
-  </table>
-
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of pólizas"></mat-paginator>
-
-  <button mat-fab color="primary" style="float: right;" routerLink="/pages/poliza/new">
-      <mat-icon>add</mat-icon>
-  </button>
-</div>
+</mat-horizontal-stepper>

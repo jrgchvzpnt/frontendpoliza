@@ -1,119 +1,88 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MaterialModule } from '../../material/material.module';
-import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
-import { MatTableDataSource } from '@angular/material/table';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule, NgClass } from '@angular/common';
+import { Inventario } from '../../Model/inventario';
+import { EmpleadoService } from '../../services/empleado.service';
+import { Empleado } from '../../Model/empleado';
+import { InventarioService } from '../../services/inventario.service';
 import { Poliza } from '../../Model/poliza';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { format, formatISO } from 'date-fns';
 import { PolizaService } from '../../services/poliza.services';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-poliza',
   standalone: true,
-  imports: [MaterialModule, RouterOutlet, RouterLink],
+  imports: [MaterialModule, ReactiveFormsModule, NgClass, CommonModule],
   templateUrl: './poliza.component.html',
   styleUrl: './poliza.component.css'
 })
 export class PolizaComponent  implements OnInit {
 
-  dataSource = new MatTableDataSource<Poliza>([]);
-
-  columnDefinitions = [
-    { def: 'idPoliza', label: 'ID Poliza', hide: false },
-    { def: 'sku', label: 'SKU', hide: false },
-    { def: 'nombreArticulo', label: 'Detalle Articulo', hide: false },
-    { def: 'cantidad', label: 'Cantidad', hide: false },
-    { def: 'empleado', label: 'Empleado', hide: false },
-    { def: 'actions', label: 'Actions', hide: false }
-  ];
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  firstFormGroup!: FormGroup;
+  secondFormGroup!: FormGroup;
+  empleado: Empleado[] = [];
+  inventario: Inventario[] = [];
+  minDate: Date = new Date();
 
   constructor(
+    private formBuilder: FormBuilder,
+    private empleadoService: EmpleadoService,
+    private inventarioService: InventarioService,
     private polizaService: PolizaService,
-    private _snackBar: MatSnackBar,
-    private route: ActivatedRoute
-  ) {}
+    private _snackBar: MatSnackBar
+
+    ){}
+
 
   ngOnInit(): void {
-    this.polizaService.findAllPolizas().subscribe({
-      next: (data) => {
-        const polizaArray = Array.isArray(data) ? data : [data];
-        console.log("polizaArray: " + polizaArray);
-        this.createTable(polizaArray);
-      },
-      error: (error) => {
-        this._snackBar.open(
-          'Error al cargar las pólizas. Inténtalo de nuevo más tarde.',
-          'ERROR',
-          {
-            duration: 5000,
+    this.firstFormGroup = this.formBuilder.group({
+      idPoliza: ['', Validators.required],
+      cantidad: ['', Validators.required],
+      empleadoGenero: ['', Validators.required],
+      inventario: ['',Validators.required],
+      fecha: [new FormControl(new Date()), Validators.required]
+    });
+    this.loadInitialData();
+
+  }
+
+  save(){
+      const poliza = new Poliza();
+      poliza.idPoliza = this.firstFormGroup.value['idPoliza'];
+      poliza.cantidad = this.firstFormGroup.value['cantidad'];
+      poliza.empleadoGenero = this.firstFormGroup.value['empleadoGenero'];
+      poliza.inventario = this.firstFormGroup.value['inventario'] ;
+      poliza.fecha =  format(this.firstFormGroup.value['fecha'], "yyyy-MM-dd");
+
+      this.polizaService.save(poliza).subscribe({
+        next: (data) => {
+          this._snackBar.open('Poliza guardada exitosamente!', 'Cerrar', {
+            duration: 3000,
             verticalPosition: 'top',
-            horizontalPosition: 'right',
+          });
+        },
+        error: (error) => {
+            // Maneja el error aquí y muestra el mensaje desde el backend
+            const mensajeError = error?.error?.Data?.Mensaje || 'Ocurrió un error al guardar la poliza.';
+            this._snackBar.open(mensajeError, 'ERROR', {
+              duration: 7000,
+              verticalPosition: 'top',
+              horizontalPosition: 'right',
+            });
           }
-        );
-      }
-    });
-  }
-
-
-  checkchildren(): boolean {
-    return !this.dataSource || this.dataSource.data.length ===0;
-  }
-
-
-  delete(idPoliza: number) {
-    this.polizaService.delete(idPoliza).subscribe({
-      next: () => {
-        this.polizaService.findAllPolizas().subscribe((data) => {
-          this.createTable(data);
-          this.polizaService.setMessageChange('Poliza eliminada correctamente.');
-        });
-      },
-      error: (error) => {
-        const mensajeError = error?.error?.Data?.Mensaje || 'Error al eliminar la poliza.';
-        this._snackBar.open(mensajeError, 'ERROR', {
-          duration: 5000,
-          verticalPosition: 'top',
-          horizontalPosition: 'right',
-        });
-      },
-    });
-  }
-
-
-  createTable(response: any) {
-    if (response?.Data){
-
-      const transformedData = response.map((item: any) => ({
-        idPoliza: item.Data.Poliza.IDPoliza,
-        nombreEmpleado: item.Data.Empleado.Nombre,
-        apellidoEmpleado: item.Data.Empleado.Apellido,
-        sku: item.Data.DetalleArticulo.SKU,
-        nombreArticulo: item.Data.DetalleArticulo.Nombre,
-        cantidad: item.Data.Poliza.Cantidad,
-      }));
-      this.dataSource = new MatTableDataSource(transformedData);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    }
-    else
-    {
-      console.error('No se Encontraron datos en la respuesta .');
-    }
+      });
 
   }
 
-  getDisplayedColumns(): string[] {
-    return this.columnDefinitions.filter((cd) => !cd.hide).map((cd) => cd.def);
-  }
+  loadInitialData(){
+    this.empleadoService.findAllEmpleado().subscribe(data => this.empleado = data);
+    this.inventarioService.findAllInventario().subscribe(data => this.inventario = data);
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
+  getDate(e: any){
+    console.log(e.value);
+  }
 
 }
