@@ -23,6 +23,7 @@ import {MatExpansionModule } from '@angular/material/expansion';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 
@@ -52,8 +53,9 @@ import {MatCardModule} from '@angular/material/card';
     MatExpansionModule,
     MatAutocompleteModule,
     MatListModule,
-    MatCardModule
-    
+    MatCardModule,
+    MatTabsModule
+
   ],
   providers:[
     {provide: MAT_DATE_LOCALE, useValue: "es-ES" },

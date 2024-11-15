@@ -4,9 +4,13 @@ import { EmpleadoEditComponent } from './empleado/empleado-edit/empleado-edit.co
 import { InventarioComponent } from './inventario/inventario.component';
 import { InventarioEditComponent } from './inventario/inventario-edit/inventario-edit.component';
 import { PolizaComponent } from './poliza/poliza.component';
+import { SearchComponent } from './search/search.component';
 
 
 export const pageRoutes: Routes = [
+  {
+    path: 'search', component: SearchComponent,
+  },
   {
     path: 'empleado',
     component: EmpleadoComponent,

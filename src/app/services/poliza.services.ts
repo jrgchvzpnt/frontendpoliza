@@ -5,6 +5,7 @@ import { Subject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Poliza } from '../Model/poliza';
 import { Injectable } from '@angular/core';
+import { FilterConsultDTO } from '../Model/FilterConsultDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +33,14 @@ export class PolizaService extends GenericService<Poliza> {
 
   getMessageChange(): Observable<string> {
     return this.messageChange.asObservable();
+  }
+
+  searchOthers(dto: FilterConsultDTO){
+    return this.http.post<Poliza[]>(`${this.url}/search/others`, dto);
+  }
+
+  searchByDates(date1: string, date2: string){
+    return this.http.get<Poliza[]>(`${this.url}/search/dates?date1=${date1}&date2=${date2}`);
   }
 
 

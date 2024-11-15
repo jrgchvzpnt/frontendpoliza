@@ -1,10 +1,9 @@
-<mat-horizontal-stepper #stepper>
-  <mat-step>
+
   <ng-template matStepLabel>Principal</ng-template>
     <div class="form-container">
       <form [formGroup]="firstFormGroup">
         <mat-form-field>
-          <input matInput placeholder="Poliza" formControlName="idPoliza">
+          <input matInput placeholder="Num. Poliza" formControlName="idPoliza">
        </mat-form-field>
 
 
@@ -47,6 +46,3 @@
       </form>
 
     </div>
-  </mat-step>
-
-</mat-horizontal-stepper>
